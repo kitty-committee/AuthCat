@@ -1,3 +1,7 @@
+/**
+ * @file auth.hpp
+ */
+
 #include "db/Credentials.hpp"
 #include "db/User.hpp"
 #include "jdbc/cppconn/connection.h"

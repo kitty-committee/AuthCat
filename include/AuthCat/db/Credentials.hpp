@@ -1,3 +1,7 @@
+/**
+ * @file Credentials.hpp
+ */
+
 #include <string>
 namespace nathcat {
 namespace auth {
