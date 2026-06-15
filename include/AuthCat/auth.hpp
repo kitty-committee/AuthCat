@@ -1,10 +1,16 @@
 /**
  * @file auth.hpp
+ * @brief For client applications, specify AUTHCAT_CLIENT_MODE before including
+ * this file
  */
 
 #include "db/Credentials.hpp"
 #include "db/User.hpp"
+
+#ifndef AUTHCAT_CLIENT_MODE
 #include "jdbc/cppconn/connection.h"
+#endif
+
 #include <exception>
 #include <fstream>
 #include <memory>
@@ -15,6 +21,7 @@
 namespace nathcat {
 namespace auth {
 
+#ifndef AUTHCAT_CLIENT_MODE
 /**
  * @class ServerConfig
  * @brief Configuration for the server program
@@ -24,7 +31,9 @@ struct ServerConfig {
   std::string host;
   int port;
 };
+#endif
 
+#ifdef AUTHCAT_CLIENT_MODE
 /**
  * @class ClientConfig
  * @brief Configuration for client programs
@@ -39,6 +48,7 @@ struct ClientConfig {
  * require it. This should be set by the program using the client library.
  */
 static struct ClientConfig clientConfig;
+#endif
 
 /**
  * @brief Get the program configuration
@@ -64,8 +74,11 @@ class NotFound : std::exception {};
  * @param creds The credentials to authenticate
  * @throws AuthFailed
  */
-nathcat::auth::User authenticate(std::unique_ptr<sql::Connection> &sql,
-                                 Credentials &creds);
+nathcat::auth::User authenticate(
+#ifndef AUTHCAT_CLIENT_MODE
+    std::unique_ptr<sql::Connection> &sql,
+#endif
+    Credentials &creds);
 
 /**
  * @brief Attempt to authenticate a token
@@ -73,8 +86,11 @@ nathcat::auth::User authenticate(std::unique_ptr<sql::Connection> &sql,
  * @param creds The token to authenticate
  * @throws AuthFailed
  */
-nathcat::auth::User authenticate(std::unique_ptr<sql::Connection> &sql,
-                                 Credentials_Token &creds);
+nathcat::auth::User authenticate(
+#ifndef AUTHCAT_CLIENT_MODE
+    std::unique_ptr<sql::Connection> &sql,
+#endif
+    Credentials_Token &creds);
 
 /**
  * @brief Get a user by their unique ID
@@ -82,22 +98,34 @@ nathcat::auth::User authenticate(std::unique_ptr<sql::Connection> &sql,
  * @param id The unique ID of the user
  * @throws NotFound
  */
-nathcat::auth::User getById(std::unique_ptr<sql::Connection> &sql, int id);
+nathcat::auth::User getById(
+#ifndef AUTHCAT_CLIENT_MODE
+    std::unique_ptr<sql::Connection> &sql,
+#endif
+    int id);
 
 /**
  * @brief Search for a set of users by their username
  *
  * @param username The username to search for
  */
-std::vector<User> searchByUsername(std::unique_ptr<sql::Connection> &sql,
-                                   std::string username);
+std::vector<User> searchByUsername(
+#ifndef AUTHCAT_CLIENT_MODE
+    std::unique_ptr<sql::Connection> &sql,
+#endif
+
+    std::string username);
 
 /**
  * @brief Search for a set of users by their full name.
  *
  * @param username The name to search for
  */
-std::vector<User> searchByFullName(std::unique_ptr<sql::Connection> &sql,
-                                   std::string fullName);
+std::vector<User> searchByFullName(
+#ifndef AUTHCAT_CLIENT_MODE
+    std::unique_ptr<sql::Connection> &sql,
+#endif
+
+    std::string fullName);
 } // namespace auth
 } // namespace nathcat

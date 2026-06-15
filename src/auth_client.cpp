@@ -1,3 +1,4 @@
+#define AUTHCAT_CLIENT_MODE
 #include <AuthCat/auth.hpp>
 #include <bcrypt.h>
 #include <httplib.h>
@@ -17,8 +18,7 @@ void to_json(nlohmann::json &j, const Credentials &c) {
 } // namespace auth
 } // namespace nathcat
 
-User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
-                                 Credentials &creds) {
+User nathcat::auth::authenticate(Credentials &creds) {
   httplib::Client cli(clientConfig.hostUrl);
 
   nlohmann::json body = creds;
@@ -43,8 +43,7 @@ User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
   }
 }
 
-User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
-                                 Credentials_Token &creds) {
+User nathcat::auth::authenticate(Credentials_Token &creds) {
   httplib::Client cli(clientConfig.hostUrl);
 
   std::string cookie = "AuthCat-SSO=";
@@ -102,7 +101,7 @@ std::vector<User> __user_search(nlohmann::json &body) {
   }
 }
 
-User nathcat::auth::getById(std::unique_ptr<sql::Connection> &sql, int id) {
+User nathcat::auth::getById(int id) {
   nlohmann::json body;
   body["id"] = id;
 
@@ -114,18 +113,14 @@ User nathcat::auth::getById(std::unique_ptr<sql::Connection> &sql, int id) {
   }
 }
 
-std::vector<User>
-nathcat::auth::searchByUsername(std::unique_ptr<sql::Connection> &sql,
-                                std::string username) {
+std::vector<User> nathcat::auth::searchByUsername(std::string username) {
   nlohmann::json body;
   body["username"] = username;
 
   return __user_search(body);
 }
 
-std::vector<User>
-nathcat::auth::searchByFullName(std::unique_ptr<sql::Connection> &sql,
-                                std::string fullName) {
+std::vector<User> nathcat::auth::searchByFullName(std::string fullName) {
   nlohmann::json body;
   body["fullName"] = fullName;
 
