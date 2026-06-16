@@ -18,6 +18,8 @@
 #include <string>
 #include <vector>
 
+#define AUTHCAT_COOKIE_NAME "AuthCat-SSO"
+
 namespace nathcat {
 namespace auth {
 
