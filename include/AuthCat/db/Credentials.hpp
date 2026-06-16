@@ -2,6 +2,9 @@
  * @file Credentials.hpp
  */
 
+#ifndef _CREDENTIALS
+#define _CREDENTIALS
+
 #include <string>
 namespace nathcat {
 namespace auth {
@@ -23,3 +26,5 @@ public:
 
 } // namespace auth
 } // namespace nathcat
+
+#endif

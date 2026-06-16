@@ -1,3 +1,6 @@
+#ifndef _USER
+#define _USER
+
 #include <AuthCat/db/User.hpp>
 #include <api/sql.hpp>
 #include <nlohmann/json.hpp>
@@ -38,3 +41,4 @@ User_NoSensitiveData nathcat::sqlwrapper::fromRow<User_NoSensitiveData>(
           res->getString("fullName"), res->getString("pfpPath"),
           res->getBoolean("verified")};
 }
+#endif
