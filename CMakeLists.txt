@@ -49,7 +49,7 @@ else()
   #apiserver
   bcrypt
   nlohmann_json::nlohmann_json
-  httplib
+  #httplib
 )
 
 endif()
