@@ -3,6 +3,8 @@
  * @brief For client applications, specify AUTHCAT_CLIENT_MODE before including
  * this file
  */
+#ifndef _AUTH
+#define _AUTH
 
 #include "db/Credentials.hpp"
 #include "db/User.hpp"
@@ -131,3 +133,5 @@ std::vector<User> searchByFullName(
     std::string fullName);
 } // namespace auth
 } // namespace nathcat
+
+#endif
