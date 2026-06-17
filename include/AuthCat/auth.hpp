@@ -54,13 +54,18 @@ struct ClientConfig {
 static struct ClientConfig clientConfig;
 #endif
 
+#ifndef AUTHCAT_CLIENT_MODE
+void from_json(const nlohmann::json &j, struct ServerConfig &c);
+#else
+void from_json(const nlohmann::json &j, struct ClientConfig &c);
+#endif
+
 /**
  * @brief Get the program configuration
  *
- * @tparam Conf The expected config type
  * @param path The file location of the config
  */
-template <typename Conf> Conf getConfig(std::string path) {
+template <typename Conf> Conf getServerConfig(std::string path) {
   std::ifstream f(path);
   nlohmann::json data = nlohmann::json::parse(f);
 
