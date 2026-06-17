@@ -1,3 +1,4 @@
+#define CPPHTTPLIB_OPENSSL_SUPPORT
 #define AUTHCAT_CLIENT_MODE
 #include <AuthCat/auth.hpp>
 #include <bcrypt.h>
@@ -7,6 +8,8 @@ using namespace nathcat::auth;
 
 namespace nathcat {
 namespace auth {
+struct ClientConfig clientConfig = {"https://data.nathcat.net"};
+
 void from_json(const nlohmann::json &j, struct ClientConfig &conf) {
   j.at("hostUrl").get_to(conf.hostUrl);
 }
@@ -51,15 +54,15 @@ User nathcat::auth::authenticate(Credentials_Token &creds) {
 
   httplib::Headers headers = {{"Cookie", cookie}};
 
-  if (auto res = cli.Get("/sso/get-session.php")) {
+  if (auto res = cli.Get("/sso/get-session.php", headers)) {
     if (res->status == httplib::StatusCode::OK_200) {
-      if (res->body == "{}") {
+
+      if (res->body == "{}" || res->body == "[]") {
         throw AuthFailed();
       }
 
       nlohmann::json result = nlohmann::json::parse(res->body);
-
-      return result.get<User>();
+      return result.at("user").get<User>();
     } else {
       throw AuthFailed();
     }

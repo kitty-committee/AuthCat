@@ -51,7 +51,7 @@ struct ClientConfig {
  * @brief Stores the current client configuration for use by functions which
  * require it. This should be set by the program using the client library.
  */
-static struct ClientConfig clientConfig;
+extern struct ClientConfig clientConfig;
 #endif
 
 #ifndef AUTHCAT_CLIENT_MODE
