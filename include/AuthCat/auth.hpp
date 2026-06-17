@@ -65,7 +65,7 @@ void from_json(const nlohmann::json &j, struct ClientConfig &c);
  *
  * @param path The file location of the config
  */
-template <typename Conf> Conf getServerConfig(std::string path) {
+template <typename Conf> Conf getConfig(std::string path) {
   std::ifstream f(path);
   nlohmann::json data = nlohmann::json::parse(f);
 
