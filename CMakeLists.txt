@@ -32,7 +32,7 @@ else()
 
   add_subdirectory(libs)
 
-  add_library(AuthCat-Client SHARED
+  add_library(AuthCat-Client STATIC
   src/User_client.cpp
   src/auth_client.cpp
 )
