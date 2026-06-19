@@ -73,9 +73,9 @@ template <typename Conf> Conf getConfig(std::string path) {
   return data.get<Conf>();
 }
 
-class AuthFailed : std::exception {};
+class AuthFailed : public std::exception {};
 
-class NotFound : std::exception {};
+class NotFound : public std::exception {};
 
 /**
  * @brief Attempt to authenticate a set of credentials
