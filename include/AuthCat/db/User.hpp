@@ -15,7 +15,7 @@ struct User {
   std::string email;
   std::string fullName;
   std::string pfpPath;
-  bool verified;
+  int verified;
 };
 
 void from_json(const nlohmann::json &j, User &u);
@@ -25,7 +25,7 @@ struct User_NoSensitiveData {
   std::string username;
   std::string fullName;
   std::string pfpPath;
-  bool verified;
+  int verified;
 };
 
 void from_json(const nlohmann::json &j, User_NoSensitiveData &u);

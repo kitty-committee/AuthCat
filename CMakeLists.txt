@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.31.11)
+cmake_minimum_required(VERSION 3.28.3)
 
 if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
 
@@ -33,10 +33,10 @@ else()
 
   add_subdirectory(libs)
 
-  add_library(AuthCat-Client SHARED
+  add_library(AuthCat-Client STATIC
   src/client/User.cpp
   src/client/auth.cpp
-)
+  )
 
   target_include_directories(AuthCat-Client PUBLIC
   include

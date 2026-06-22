@@ -51,7 +51,7 @@ struct ClientConfig {
  * @brief Stores the current client configuration for use by functions which
  * require it. This should be set by the program using the client library.
  */
-static struct ClientConfig clientConfig;
+extern struct ClientConfig clientConfig;
 #endif
 
 #ifndef AUTHCAT_CLIENT_MODE
@@ -73,9 +73,9 @@ template <typename Conf> Conf getConfig(std::string path) {
   return data.get<Conf>();
 }
 
-class AuthFailed : std::exception {};
+class AuthFailed : public std::exception {};
 
-class NotFound : std::exception {};
+class NotFound : public std::exception {};
 
 /**
  * @brief Attempt to authenticate a set of credentials
