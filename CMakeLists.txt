@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.31.11)
 
-if(NOT DEFINED CLIENTBUILD)
+if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
 
   project(AuthCat-Server)
 
   add_subdirectory(libs)
 
-  add_executable(AuthCat-Server src/main.cpp)
+  add_executable(AuthCat-Server src/server/main.cpp)
 
   target_sources(AuthCat-Server PUBLIC
-  src/User.cpp
-  src/auth_server.cpp
+  src/server/User.cpp
+  src/server/auth.cpp
 )
 
   target_include_directories(AuthCat-Server PUBLIC
@@ -18,6 +18,7 @@ if(NOT DEFINED CLIENTBUILD)
   libs/bcrypt/include
   libs/apiserver/include
   libs/json/include
+  libs/apiserver/libs/mysql/include
 )
 
   target_link_libraries(AuthCat-Server PUBLIC
@@ -33,23 +34,20 @@ else()
   add_subdirectory(libs)
 
   add_library(AuthCat-Client SHARED
-  src/User_client.cpp
-  src/auth_client.cpp
+  src/client/User.cpp
+  src/client/auth.cpp
 )
 
   target_include_directories(AuthCat-Client PUBLIC
   include
   libs/bcrypt/include
-  #libs/apiserver/include
   libs/json/include
   libs/apiserver/libs/httplib
 )
 
   target_link_libraries(AuthCat-Client PUBLIC
-  #apiserver
   bcrypt
   nlohmann_json::nlohmann_json
-  #httplib
 )
 
 endif()

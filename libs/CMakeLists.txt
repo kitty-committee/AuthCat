@@ -1,4 +1,4 @@
-if(NOT DEFINED CLIENTBUILD)
+if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   add_subdirectory(apiserver)
   #else()
   #  add_subdirectory(apiserver/libs/httplib)
