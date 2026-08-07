@@ -12,6 +12,9 @@ namespace auth {
 void from_json(const nlohmann::json &j, struct ServerConfig &conf) {
   j.at("host").get_to(conf.host);
   j.at("port").get_to(conf.port);
+  j.at("dbUrl").get_to(conf.dbUrl);
+  j.at("dbUsername").get_to(conf.dbUsername);
+  j.at("dbPassword").get_to(conf.dbPassword);
 }
 } // namespace auth
 } // namespace nathcat

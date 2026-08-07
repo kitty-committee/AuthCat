@@ -21,3 +21,5 @@ CMakeUserPresets.json
 clientbuild
 build
 .cache
+
+Assets/server_conf.json

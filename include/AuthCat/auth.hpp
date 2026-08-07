@@ -8,11 +8,13 @@
 
 #include "db/Credentials.hpp"
 #include "db/User.hpp"
+#include "jdbc/cppconn/driver.h"
 
 #ifndef AUTHCAT_CLIENT_MODE
 #include "jdbc/cppconn/connection.h"
 #endif
 
+#include <cryptorand.h>
 #include <exception>
 #include <fstream>
 #include <memory>
@@ -34,7 +36,14 @@ namespace auth {
 struct ServerConfig {
   std::string host;
   int port;
+  std::string dbUrl;
+  std::string dbUsername;
+  std::string dbPassword;
 };
+
+extern cryptorand *rng;
+extern sql::Driver *driver;
+extern ServerConfig serverConfig;
 #endif
 
 #ifdef AUTHCAT_CLIENT_MODE

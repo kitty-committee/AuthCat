@@ -11,6 +11,10 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   target_sources(AuthCat-Server PUBLIC
   src/server/User.cpp
   src/server/auth.cpp
+  src/server/auth_endpoint.cpp
+  src/server/auth_grant.cpp
+  src/server/util.cpp
+  src/server/db.cpp
 )
 
   target_include_directories(AuthCat-Server PUBLIC
@@ -19,6 +23,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   libs/apiserver/include
   libs/json/include
   libs/apiserver/libs/mysql/include
+  libs/cryptorand
 )
 
   target_link_libraries(AuthCat-Server PUBLIC
