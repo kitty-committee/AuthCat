@@ -16,7 +16,7 @@ namespace auth {
 typedef struct {
   uint32_t user;
   uint32_t token;
-  uint8_t scope[AUTH_GRANT_SCOPE_SIZE];
+  uint64_t scope;
 } AuthGrant;
 
 /**
@@ -30,7 +30,7 @@ struct Scope {
    */
   bool allResources;
 
-  bool padding[(AUTH_GRANT_SCOPE_SIZE * 8) - 1];
+  bool padding[64 - 1]; // Subtract one because one is used
 };
 
 /**
@@ -55,9 +55,8 @@ struct Scope extract_scope_from_auth_grant(AuthGrant grant);
  * token
  *
  * @param scope The scope to be converted
- * @return A buffer of size AUTH_GRANT_SCOPE_SIZE, where each bit of each
- * element corresponds to fields in the scope.
+ * @return A 64 bit buffer containing the scope information
  */
-uint8_t scope_to_buffer(struct Scope scope);
+uint64_t scope_to_buffer(struct Scope scope);
 } // namespace auth
 } // namespace nathcat

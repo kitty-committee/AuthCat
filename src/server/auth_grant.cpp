@@ -13,11 +13,12 @@ struct Scope nathcat::auth::extract_scope_from_auth_grant(AuthGrant grant) {
   // Get pointers into the internal memory of the scope struct, and the scope
   // section of the auth grant
   bool *scopePointer = (bool *)&scope;
-  uint8_t *grantPointer = grant.scope;
+  uint8_t *grantPointer = (uint8_t *)&(grant.scope);
   int innerCounter = 0;
+  uint8_t *scopeBoundary = (uint8_t *)((&grant.scope) + 1);
 
-  // Iterate until the end of the scope sectioon in the auth grant
-  while (grantPointer < (grant.scope + AUTH_GRANT_SCOPE_SIZE)) {
+  // Iterate until the end of the scope section in the auth grant
+  while (grantPointer < scopeBoundary) {
     // If the boundary of the current byte of scope has been reached, move to
     // the next scope byte
     if (innerCounter == 8) {
@@ -45,11 +46,14 @@ AuthGrant nathcat::auth::create_auth_grant(int user, struct Scope scope) {
   grant.token = token;
 
   bool *scopePointer = (bool *)&scope;
-  uint8_t *bytePointer = grant.scope;
+  uint8_t *bytePointer = (uint8_t *)(&grant.scope);
   int bitCount = 0;
+  bool *scopeBoundary = (bool *)(&scope + 1);
 
-  // Iterate until the end of the scope struct
-  while (scopePointer < ((bool *)((&scope) + 1))) {
+  // Iterate until the end of the scope struc
+  // There will always be 64 bools allocated in the scope struct, to correspond
+  // with the 64 bits of the buffer scope
+  while (scopePointer < scopeBoundary) {
     // Copy the value of the current scope bool into the current bit
     *bytePointer |= (uint8_t)((*scopePointer) << bitCount);
     scopePointer++;
@@ -64,4 +68,26 @@ AuthGrant nathcat::auth::create_auth_grant(int user, struct Scope scope) {
   }
 
   return grant;
+}
+
+uint64_t nathcat::auth::scope_to_buffer(struct Scope scope) {
+  uint64_t buffer = 0;
+
+  bool *scopeBoundary = (bool *)(&scope + 1);
+  bool *scopePointer = (bool *)&scope;
+  uint8_t *bufferPointer = (uint8_t *)&buffer;
+  int innerCounter = 0;
+
+  while (scopePointer < scopeBoundary) {
+    *bufferPointer |= (*scopePointer) << innerCounter;
+    scopePointer++;
+    innerCounter++;
+
+    if (innerCounter == 8) {
+      bufferPointer++;
+      innerCounter = 0;
+    }
+  }
+
+  return buffer;
 }
