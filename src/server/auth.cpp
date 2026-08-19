@@ -21,20 +21,30 @@ void from_json(const nlohmann::json &j, struct ServerConfig &conf) {
 
 User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
                                  Credentials &creds) {
-  std::unique_ptr<sql::PreparedStatement> stmt{sql->prepareStatement(
-      "SELECT * FROM Users WHERE username = ? AND password = ?")};
+  std::unique_ptr<sql::PreparedStatement> stmt{
+      sql->prepareStatement("SELECT * FROM Users WHERE username = ?")};
 
   stmt->setString(1, creds.username);
-  stmt->setString(2, bcrypt::generateHash(creds.password));
 
   std::unique_ptr<sql::ResultSet> res{stmt->executeQuery()};
 
-  // If there are any results, the auth is successful.
+  // If there are any results, validate the password hash and return the user if
+  // successful, throw an AuthFailed otherwise.
+  int count = 0;
+  User u;
   while (res->next()) {
-    return fromRow<User>(res);
+    u = fromRow<User>(res);
+    count++;
   }
 
-  throw AuthFailed();
+  if (count != 1)
+    throw AuthFailed();
+  else {
+    if (!bcrypt::validatePassword(creds.password, u.password))
+      throw AuthFailed();
+    else
+      return u;
+  }
 }
 
 User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,

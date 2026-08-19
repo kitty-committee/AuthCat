@@ -33,6 +33,16 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   cryptorand
 )
 
+  project(hashtest)
+  add_executable(hashtest src/hashtest.cpp)
+  target_include_directories(hashtest PUBLIC
+    libs/bcrypt/include
+  )
+  target_link_libraries(hashtest PUBLIC
+    bcrypt
+  )
+
+
 else()
 
   project(AuthCat-Client)
