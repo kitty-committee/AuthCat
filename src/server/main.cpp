@@ -18,7 +18,6 @@ int main() {
           "Assets/server_conf.json");
 
   // Init RNG
-  nathcat::auth::rng = (cryptorand *)malloc(sizeof(cryptorand));
   cryptorand_init(nathcat::auth::rng);
 
   // Set up server endpoints

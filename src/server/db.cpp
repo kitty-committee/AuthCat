@@ -8,6 +8,7 @@ namespace nathcat {
 namespace auth {
 sql::Driver *driver = sql::mysql::get_driver_instance();
 struct ServerConfig serverConfig = {};
+cryptorand *rng = (cryptorand *)malloc(sizeof(cryptorand));
 } // namespace auth
 } // namespace nathcat
 

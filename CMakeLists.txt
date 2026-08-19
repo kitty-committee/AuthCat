@@ -30,6 +30,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   apiserver
   bcrypt
   nlohmann_json::nlohmann_json
+  cryptorand
 )
 
 else()

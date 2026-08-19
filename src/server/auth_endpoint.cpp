@@ -1,5 +1,6 @@
 #include "AuthCat/db/Credentials.hpp"
 #include "jdbc/cppconn/connection.h"
+#include "jdbc/cppconn/exception.h"
 #include <AuthCat/auth.hpp>
 #include <AuthCat/auth_grant.hpp>
 #include <AuthCat/oauth.hpp>
@@ -11,10 +12,20 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
                                   httplib::Response &res) {
   std::string c;
 
-  std::unique_ptr<sql::Connection> db{nathcat::auth::driver->connect(
-      auth::serverConfig.dbUrl, auth::serverConfig.dbUsername,
-      auth::serverConfig.dbPassword)};
-  db->setSchema("oauth");
+  // Attempt to open a connection to the database
+  std::unique_ptr<sql::Connection> db;
+  try {
+    db = std::unique_ptr<sql::Connection>{nathcat::auth::driver->connect(
+        auth::serverConfig.dbUrl, auth::serverConfig.dbUsername,
+        auth::serverConfig.dbPassword)};
+    db->setSchema("oauth");
+  } catch (sql::SQLException &e) {
+    std::cerr << "Couldn't connect to MySQL DB." << std::endl;
+    c = "500 - Internal error";
+    res.status = httplib::StatusCode::InternalServerError_500;
+    res.set_content(c, "text/plain");
+    return;
+  }
 
   // Get query params
   if (!req.has_param("response_type") || !req.has_param("client_id")) {
@@ -62,8 +73,22 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
     return;
   }
 
-  std::unique_ptr<sql::Connection> db{driver->connect(
-      serverConfig.dbUrl, serverConfig.dbUsername, serverConfig.dbPassword)};
+  std::string c;
+
+  // Attempt to open a connection to the database
+  std::unique_ptr<sql::Connection> db;
+  try {
+    db = std::unique_ptr<sql::Connection>{nathcat::auth::driver->connect(
+        auth::serverConfig.dbUrl, auth::serverConfig.dbUsername,
+        auth::serverConfig.dbPassword)};
+    db->setSchema("oauth");
+  } catch (sql::SQLException &e) {
+    std::cerr << "Couldn't connect to MySQL DB." << std::endl;
+    c = "500 - Internal error";
+    res.status = httplib::StatusCode::InternalServerError_500;
+    res.set_content(c, "text/plain");
+    return;
+  }
 
   struct client client = util::get_client(db, req.get_param_value("client_id"));
   std::string username = req.form.get_field("username");
