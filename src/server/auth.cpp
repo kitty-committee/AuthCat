@@ -49,6 +49,7 @@ User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
 
 User nathcat::auth::authenticate(std::unique_ptr<sql::Connection> &sql,
                                  Credentials_Token &creds) {
+  // This won't work! But I wanna get rid of this method anyway lol
   std::unique_ptr<sql::PreparedStatement> stmt{sql->prepareStatement(
       "SELECT Users.* FROM QuickAuth JOIN Users ON QuickAuth.id = Users.id "
       "WHERE QuickAuth.tokenHash = ?")};
