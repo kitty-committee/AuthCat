@@ -26,7 +26,7 @@ void nathcat::auth::token_endpoint(const httplib::Request &req,
 
   // The authorization header supplied is of the wrong format, respond with an
   // bad request error
-  if (!std::regex_match(auth_header, auth_match, util::token_auth_regex)) {
+  if (!std::regex_match(auth_header, auth_match, util::client_auth_regex)) {
 
     res.status = httplib::StatusCode::BadRequest_400;
     res.set_content("{\"error\":\"invalid_request\"}", "application/json");
@@ -110,10 +110,13 @@ void nathcat::auth::token_endpoint(const httplib::Request &req,
 
   // Access token has been generated and successfully inserted into the DB,
   // we must now serve it to the client.
+  std::ostringstream os;
+  os << std::hex << access_token.token;
+
   res.status = httplib::StatusCode::OK_200;
   res.set_header("Cache-Control", "no-store");
   res.set_header("Pragma", "no-cache");
-  res.set_content(nlohmann::json{{"access_token", access_token.token},
+  res.set_content(nlohmann::json{{"access_token", os.str()},
                                  {"token_type", "Bearer"},
                                  {"expires_in", ACCESS_TOKEN_EXPIRY_TIME}}
                       .dump(),

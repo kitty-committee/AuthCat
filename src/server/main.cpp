@@ -25,7 +25,9 @@ int main() {
   s.registerEndpoints(
       {{"/auth", {nathcat::auth::auth_endpoint, nullptr}},
        {"/auth/form", {nullptr, nathcat::auth::auth_form_endpoint}},
-       {"/token", {nullptr, nathcat::auth::token_endpoint}}});
+       {"/token", {nullptr, nathcat::auth::token_endpoint}},
+       {"/token/validate",
+        {nathcat::auth::validate_access_token_endpoint, nullptr}}});
 
   s.registerEndpoint({"/test", {test, nullptr}});
 

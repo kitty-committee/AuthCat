@@ -25,7 +25,8 @@ struct client {
 
 namespace util {
 
-extern std::regex token_auth_regex;
+extern std::regex client_auth_regex;
+extern std::regex bearer_token_auth_regex;
 
 /**
  * @brief Read the contents of a file
@@ -56,6 +57,13 @@ void auth_form_endpoint(const httplib::Request &req, httplib::Response &res);
  * access tokens.
  */
 void token_endpoint(const httplib::Request &req, httplib::Response &res);
+
+/**
+ * @brief Determine the validity of an access token and if valid, return
+ * information on its access scope.
+ */
+void validate_access_token_endpoint(const httplib::Request &req,
+                                    httplib::Response &res);
 
 } // namespace auth
 } // namespace nathcat

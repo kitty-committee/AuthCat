@@ -11,26 +11,11 @@ struct Scope nathcat::auth::extract_scope_from_auth_grant(AuthGrant grant) {
   struct Scope scope;
   std::memset(&scope, 0, sizeof(struct Scope));
 
-  // Get pointers into the internal memory of the scope struct, and the scope
-  // section of the auth grant
-  bool *scopePointer = (bool *)&scope;
-  uint8_t *grantPointer = (uint8_t *)&(grant.scope);
-  int innerCounter = 0;
-  uint8_t *scopeBoundary = (uint8_t *)((&grant.scope) + 1);
+  bool *pScope = (bool *)&scope;
 
-  // Iterate until the end of the scope section in the auth grant
-  while (grantPointer < scopeBoundary) {
-    // If the boundary of the current byte of scope has been reached, move to
-    // the next scope byte
-    if (innerCounter == 8) {
-      grantPointer++;
-      innerCounter = 0;
-    }
-
-    // Copy the boolean value of the current scope bit into the current location
-    // in the scope struct
-    *scopePointer = ((*grantPointer) & (1 << innerCounter)) >> innerCounter;
-    scopePointer++;
+  for (int i = 0; i < AUTH_GRANT_SCOPE_SIZE * 8; i++) {
+    *pScope = (grant.scope >> i) & 1;
+    pScope++;
   }
 
   return scope;

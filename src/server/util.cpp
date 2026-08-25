@@ -12,7 +12,8 @@
 namespace nathcat {
 namespace auth {
 namespace util {
-std::regex token_auth_regex("Basic (.*):(.*)");
+std::regex client_auth_regex("Basic (.*):(.*)");
+std::regex bearer_token_auth_regex("Bearer (.*)");
 
 bool validate_auth_grant(std::unique_ptr<sql::Connection> &db, AuthGrant grant,
                          std::string client_id) {

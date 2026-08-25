@@ -5,6 +5,7 @@
 #define AUTH_GRANT_HPP
 
 #include "jdbc/cppconn/connection.h"
+#include "nlohmann/json_fwd.hpp"
 #include <cstdint>
 #include <memory>
 #define AUTH_GRANT_SCOPE_SIZE 8
@@ -41,6 +42,8 @@ struct Scope {
 
   bool padding[AUTH_GRANT_SCOPE_PADDING];
 };
+
+void to_json(nlohmann::json &j, const struct Scope &s);
 
 /**
  * @brief Creates an authorization grant based on a user ID and a scope of

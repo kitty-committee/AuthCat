@@ -85,6 +85,22 @@ See [RFC 6749#7.1](https://datatracker.ietf.org/doc/html/rfc6749#section-7.1) fo
 the `token_type` field. At the time of writing the server is planned to only utilise the `Bearer`
 type (defined in [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750)).
 
+#### Token validation and scope endpoint - `GET /token/validate`
+
+This endpoint serves to verify access tokens, and give information about the scope of the provided access token.
+
+One should make requests using the `Bearer` HTTP authentication method:
+
+```
+Authorization: Bearer <access_token>
+```
+
+If the access token is valid, the server will reply with a HTTP 200 status,
+and a JSON body detailing the scope of the token.
+
+If, for whatever reason, the token is invalid, or cannot be verified,
+the server will reply with a HTTP 401 status.
+
 ## AuthCat Client library
 
 This is a static library target designed to allow client applications to interact
@@ -103,4 +119,3 @@ Note that when including `AuthCat/auth.hpp`, one must define `AUTHCAT_CLIENT_MOD
 #define AUTHCAT_CLIENT_MODE
 #include <AuthCat/auth.hpp
 ```
-

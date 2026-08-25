@@ -23,3 +23,5 @@ build
 .cache
 
 Assets/server_conf.json
+
+test.txt
