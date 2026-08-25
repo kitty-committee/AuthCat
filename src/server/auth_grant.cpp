@@ -41,16 +41,18 @@ AuthGrant nathcat::auth::create_auth_grant(int user, struct Scope scope) {
   cryptorand_generate(rng, &token, sizeof(uint32_t));
 
   AuthGrant grant;
+  std::memset(scope.padding, 0, AUTH_GRANT_SCOPE_PADDING);
 
   grant.user = user;
   grant.token = token;
+  grant.scope = 0;
 
   bool *scopePointer = (bool *)&scope;
   uint8_t *bytePointer = (uint8_t *)(&grant.scope);
   int bitCount = 0;
   bool *scopeBoundary = (bool *)(&scope + 1);
 
-  // Iterate until the end of the scope struc
+  // Iterate until the end of the scope struct
   // There will always be 64 bools allocated in the scope struct, to correspond
   // with the 64 bits of the buffer scope
   while (scopePointer < scopeBoundary) {

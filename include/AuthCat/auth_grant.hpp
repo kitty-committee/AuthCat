@@ -3,6 +3,7 @@
  */
 #include <cstdint>
 #define AUTH_GRANT_SCOPE_SIZE 8
+#define AUTH_GRANT_SCOPE_PADDING 64 - 1
 
 namespace nathcat {
 namespace auth {
@@ -30,7 +31,7 @@ struct Scope {
    */
   bool allResources;
 
-  bool padding[64 - 1]; // Subtract one because one is used
+  bool padding[AUTH_GRANT_SCOPE_PADDING];
 };
 
 /**

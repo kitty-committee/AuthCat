@@ -24,6 +24,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   libs/json/include
   libs/apiserver/libs/mysql/include
   libs/cryptorand
+  libs/boost-mlp/include
 )
 
   target_link_libraries(AuthCat-Server PUBLIC
@@ -31,6 +32,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   bcrypt
   nlohmann_json::nlohmann_json
   cryptorand
+  boost_multiprecision
 )
 
   project(hashtest)

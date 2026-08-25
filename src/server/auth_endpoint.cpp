@@ -4,9 +4,22 @@
 #include <AuthCat/auth.hpp>
 #include <AuthCat/auth_grant.hpp>
 #include <AuthCat/oauth.hpp>
+#include <boost/multiprecision/cpp_int.hpp>
 #include <httplib.h>
 #include <memory>
+#include <sstream>
 #include <string>
+using namespace boost::multiprecision;
+
+void printBytes(uint8_t *b, int n) {
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < 8; j++) {
+      std::cout << (((*b) & (1 << j)) >> j);
+    }
+    b++;
+    std::cout << " ";
+  }
+}
 
 void nathcat::auth::auth_endpoint(const httplib::Request &req,
                                   httplib::Response &res) {
@@ -66,8 +79,8 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
 
 void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
                                        httplib::Response &res) {
-  if (!req.has_param("client_id") || !req.form.has_field("username") ||
-      !req.form.has_field("password")) {
+  if (!req.has_param("client_id") || !req.has_param("username") ||
+      !req.has_param("password")) {
     res.status = httplib::StatusCode::BadRequest_400;
     res.set_content("Malformed request", "text/plain");
     return;
@@ -91,8 +104,8 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
   }
 
   struct client client = util::get_client(db, req.get_param_value("client_id"));
-  std::string username = req.form.get_field("username");
-  std::string password = req.form.get_field("password");
+  std::string username = req.get_param_value("username");
+  std::string password = req.get_param_value("password");
 
   // Authenticate the user
   nathcat::auth::User user;
@@ -110,4 +123,13 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
   // Authentication successful, create a auth grant and return it
   // TODO change the scope parameter to be something defined by the client.
   nathcat::auth::AuthGrant grantCode = create_auth_grant(user.id, {true});
+  uint128_t grantCode_int = (uint128_t) * ((uint128_t *)&grantCode);
+
+  std::ostringstream os;
+  os << std::hex << grantCode_int;
+  std::string codeParam = "?code=";
+  codeParam.append(os.str());
+
+  res.status = httplib::StatusCode::Found_302;
+  res.set_header("Location", client.redirectionUri.append(codeParam));
 }

@@ -10,3 +10,6 @@
 [submodule "libs/cryptorand"]
 	path = libs/cryptorand
 	url = https://github.com/Nathcat/cryptorand-cmake
+[submodule "libs/boost-mlp"]
+	path = libs/boost-mlp
+	url = https://github.com/boostorg/multiprecision/
