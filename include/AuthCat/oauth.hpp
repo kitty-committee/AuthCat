@@ -19,9 +19,13 @@ namespace auth {
 struct client {
   std::string id;
   std::string redirectionUri;
+  std::string password;
 };
 
 namespace util {
+
+extern std::regex token_auth_regex;
+
 /**
  * @brief Read the contents of a file
  */
@@ -31,6 +35,7 @@ std::string read_file(std::string path);
  * @brief Get client app information from the DB
  */
 struct client get_client(std::unique_ptr<sql::Connection> &db, std::string id);
+
 } // namespace util
 
 /**
@@ -42,6 +47,12 @@ void auth_endpoint(const httplib::Request &req, httplib::Response &res);
  * @brief Handles authentication form
  */
 void auth_form_endpoint(const httplib::Request &req, httplib::Response &res);
+
+/**
+ * @brief Handles requests to the token endpoint, i.e. validates and grants
+ * access tokens.
+ */
+void token_endpoint(const httplib::Request &req, httplib::Response &res);
 
 } // namespace auth
 } // namespace nathcat

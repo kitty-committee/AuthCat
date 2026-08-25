@@ -16,5 +16,6 @@ template <>
 struct nathcat::auth::client
 nathcat::sqlwrapper::fromRow<struct nathcat::auth::client>(
     std::unique_ptr<sql::ResultSet> &res) {
-  return {res->getString("id"), res->getString("redirectionUrl")};
+  return {res->getString("id"), res->getString("redirectionUrl"),
+          res->getString("password")};
 }

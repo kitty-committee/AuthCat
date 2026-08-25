@@ -1,7 +1,9 @@
 /**
  * @file auth_grant.hpp
  */
+#include "jdbc/cppconn/connection.h"
 #include <cstdint>
+#include <memory>
 #define AUTH_GRANT_SCOPE_SIZE 8
 #define AUTH_GRANT_SCOPE_PADDING 64 - 1
 
@@ -59,5 +61,13 @@ struct Scope extract_scope_from_auth_grant(AuthGrant grant);
  * @return A 64 bit buffer containing the scope information
  */
 uint64_t scope_to_buffer(struct Scope scope);
+
+namespace util {
+/**
+ * @brief Validate that an AuthGrant exists in the DB.
+ */
+bool validate_auth_grant(std::unique_ptr<sql::Connection> &db, AuthGrant grant,
+                         std::string client_id);
+} // namespace util
 } // namespace auth
 } // namespace nathcat

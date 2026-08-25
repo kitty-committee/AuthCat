@@ -13,6 +13,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   src/server/auth.cpp
   src/server/auth_endpoint.cpp
   src/server/auth_grant.cpp
+  src/server/token_endpoint.cpp
   src/server/util.cpp
   src/server/db.cpp
 )
@@ -43,6 +44,9 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   target_link_libraries(hashtest PUBLIC
     bcrypt
   )
+
+  project(regextest)
+  add_executable(regextest src/regex_test.cpp)
 
 
 else()
