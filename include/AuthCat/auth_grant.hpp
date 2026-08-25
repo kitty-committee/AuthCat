@@ -1,6 +1,9 @@
 /**
  * @file auth_grant.hpp
  */
+#ifndef AUTH_GRANT_HPP
+#define AUTH_GRANT_HPP
+
 #include "jdbc/cppconn/connection.h"
 #include <cstdint>
 #include <memory>
@@ -71,3 +74,4 @@ bool validate_auth_grant(std::unique_ptr<sql::Connection> &db, AuthGrant grant,
 } // namespace util
 } // namespace auth
 } // namespace nathcat
+#endif

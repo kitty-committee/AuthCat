@@ -1,9 +1,11 @@
 #include "AuthCat/auth.hpp"
 #include "bcrypt.h"
+#include "jdbc/cppconn/exception.h"
+#include "jdbc/cppconn/prepared_statement.h"
+#include <AuthCat/access_tokens.hpp>
 #include <AuthCat/auth_grant.hpp>
 #include <AuthCat/oauth.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
-#include <cstring>
 #include <regex>
 #include <sstream>
 using namespace nathcat::auth;
@@ -74,4 +76,33 @@ void nathcat::auth::token_endpoint(const httplib::Request &req,
 
   // Auth grant has been validated at this point, we must now create
   // an access token and serve it to the client.
+  AccessToken access_token = create_access_token(grant);
+
+  try {
+    std::unique_ptr<sql::PreparedStatement> pStmt{db->prepareStatement(
+        "INSERT INTO AccessTokens (`grant`, `token`) VALUES (?, ?)")};
+
+    pStmt->setInt(1, access_token.grant_token);
+    pStmt->setUInt64(2, access_token.token);
+
+    pStmt->executeUpdate();
+    pStmt->close();
+  } catch (sql::SQLException &e) {
+    std::cerr << "Couldn't connect to MySQL DB." << std::endl;
+    std::string c = "500 - Internal error";
+    res.status = httplib::StatusCode::InternalServerError_500;
+    res.set_content(c, "text/plain");
+    return;
+  }
+
+  // Access token has been generated and successfully inserted into the DB,
+  // we must now serve it to the client.
+  res.status = httplib::StatusCode::OK_200;
+  res.set_header("Cache-Control", "no-store");
+  res.set_header("Pragma", "no-cache");
+  res.set_content(nlohmann::json{{"access_token", access_token.token},
+                                 {"token_type", "Bearer"},
+                                 {"expires_in", ACCESS_TOKEN_EXPIRY_TIME}}
+                      .dump(),
+                  "application/json");
 }

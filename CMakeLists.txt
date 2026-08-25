@@ -14,6 +14,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   src/server/auth_endpoint.cpp
   src/server/auth_grant.cpp
   src/server/token_endpoint.cpp
+  src/server/access_tokens.cpp
   src/server/util.cpp
   src/server/db.cpp
 )
