@@ -7,6 +7,7 @@
 
 #include "jdbc/cppconn/connection.h"
 #include <api/api.hpp>
+#include <cstdint>
 #include <memory>
 
 #define OAUTH_LOGIN_PAGE_PATH "Assets/html/login.html"
@@ -35,6 +36,8 @@ std::string read_file(std::string path);
  * @brief Get client app information from the DB
  */
 struct client get_client(std::unique_ptr<sql::Connection> &db, std::string id);
+
+uint64_t epoch_time();
 
 } // namespace util
 

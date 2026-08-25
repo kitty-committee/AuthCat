@@ -52,7 +52,17 @@ void nathcat::auth::token_endpoint(const httplib::Request &req,
   }
 
   // Get the client information
-  struct client client = util::get_client(db, client_username);
+  struct client client;
+  try {
+    client = util::get_client(db, client_username);
+  } catch (NotFound &e) {
+    // The client could not be found in the DB
+    res.status = httplib::StatusCode::Unauthorized_401;
+    res.set_content("{\"error\": \"invalid_client\"}", "application/json");
+    res.set_header("WWW-Authenticate", "Basic");
+    return;
+  }
+
   // Validate the client's password, if invalid, respond with an invalid_client
   // error
   if (!bcrypt::validatePassword(client_password, client.password)) {
@@ -79,16 +89,19 @@ void nathcat::auth::token_endpoint(const httplib::Request &req,
   AccessToken access_token = create_access_token(grant);
 
   try {
-    std::unique_ptr<sql::PreparedStatement> pStmt{db->prepareStatement(
-        "INSERT INTO AccessTokens (`grant`, `token`) VALUES (?, ?)")};
+    std::unique_ptr<sql::PreparedStatement> pStmt{
+        db->prepareStatement("INSERT INTO AccessTokens (`grant`, `token`, "
+                             "`timeIssued`) VALUES (?, ?, ?)")};
 
     pStmt->setInt(1, access_token.grant_token);
-    pStmt->setUInt64(2, access_token.token);
+    pStmt->setInt64(2, access_token.token);
+    pStmt->setInt64(3, access_token.timeIssued);
 
     pStmt->executeUpdate();
     pStmt->close();
   } catch (sql::SQLException &e) {
-    std::cerr << "Couldn't connect to MySQL DB." << std::endl;
+    std::cerr << "Failed to insert access token into DB." << std::endl
+              << e.what() << std::endl;
     std::string c = "500 - Internal error";
     res.status = httplib::StatusCode::InternalServerError_500;
     res.set_content(c, "text/plain");

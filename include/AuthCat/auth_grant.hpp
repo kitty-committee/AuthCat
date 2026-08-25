@@ -10,6 +10,8 @@
 #define AUTH_GRANT_SCOPE_SIZE 8
 #define AUTH_GRANT_SCOPE_PADDING 64 - 1
 
+#define AUTH_GRANT_EXPIRY_TIME 86400
+
 namespace nathcat {
 namespace auth {
 
@@ -23,6 +25,7 @@ typedef struct {
   uint32_t user;
   uint32_t token;
   uint64_t scope;
+  uint64_t timeIssued;
 } AuthGrant;
 
 /**

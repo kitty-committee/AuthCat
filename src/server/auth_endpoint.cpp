@@ -127,14 +127,15 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
 
   // Insert the new auth code into the DB
   try {
-    std::unique_ptr<sql::PreparedStatement> stmt{
-        db->prepareStatement("INSERT INTO AuthGrants (`token`, `client`, "
-                             "`user`, `scope`) values (?, ?, ?, ?)")};
+    std::unique_ptr<sql::PreparedStatement> stmt{db->prepareStatement(
+        "INSERT INTO AuthGrants (`token`, `client`, "
+        "`user`, `scope`, `timeIssued`) values (?, ?, ?, ?, ?)")};
 
     stmt->setInt(1, grantCode.token);
     stmt->setString(2, client.id);
     stmt->setInt(3, user.id);
-    stmt->setUInt64(4, grantCode.scope);
+    stmt->setInt64(4, grantCode.scope);
+    stmt->setInt64(5, grantCode.timeIssued);
 
     stmt->executeUpdate();
     stmt->close();

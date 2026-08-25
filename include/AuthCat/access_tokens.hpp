@@ -15,6 +15,7 @@ namespace auth {
 typedef struct {
   uint32_t grant_token;
   uint64_t token;
+  uint64_t timeIssued;
 } AccessToken;
 
 /**

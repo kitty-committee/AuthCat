@@ -1,5 +1,6 @@
 
 #include "AuthCat/auth.hpp"
+#include "AuthCat/oauth.hpp"
 #include <AuthCat/auth_grant.hpp>
 #include <cstdint>
 #include <cstring>
@@ -46,6 +47,7 @@ AuthGrant nathcat::auth::create_auth_grant(int user, struct Scope scope) {
   grant.user = user;
   grant.token = token;
   grant.scope = 0;
+  grant.timeIssued = util::epoch_time();
 
   bool *scopePointer = (bool *)&scope;
   uint8_t *bytePointer = (uint8_t *)(&grant.scope);

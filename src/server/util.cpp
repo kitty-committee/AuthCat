@@ -30,10 +30,27 @@ bool validate_auth_grant(std::unique_ptr<sql::Connection> &db, AuthGrant grant,
   if (!rs->next()) {
     rs->close();
     return false;
-  } else {
-    rs->close();
-    return true;
   }
+
+  uint64_t timeIssued = rs->getInt64("timeIssued");
+  uint64_t currentTime = util::epoch_time();
+
+  // If the auth grant expiry time has passed, delete it.
+  if (currentTime > (timeIssued + AUTH_GRANT_EXPIRY_TIME)) {
+    pStmt = std::unique_ptr<sql::PreparedStatement>{
+        db->prepareStatement("DELETE FROM AuthGrants WHERE `token` = ? AND "
+                             "`client` = ? AND `scope` = ?")};
+
+    pStmt->setInt(1, grant.token);
+    pStmt->setString(2, client_id);
+    pStmt->setInt64(3, grant.scope);
+    pStmt->executeUpdate();
+
+    pStmt->close();
+    return false;
+  }
+
+  return true;
 }
 } // namespace util
 } // namespace auth
@@ -60,4 +77,12 @@ nathcat::auth::util::get_client(std::unique_ptr<sql::Connection> &db,
   if (!res->next())
     throw auth::NotFound();
   return nathcat::sqlwrapper::fromRow<struct client>(res);
+}
+
+uint64_t nathcat::auth::util::epoch_time() {
+  const auto now = std::chrono::system_clock::now();
+  const auto epoch = now.time_since_epoch();
+  const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch);
+
+  return (uint64_t)seconds.count();
 }
