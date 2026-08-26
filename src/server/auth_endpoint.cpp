@@ -1,4 +1,5 @@
 #include "AuthCat/db/Credentials.hpp"
+#include "AuthCat/html.hpp"
 #include "jdbc/cppconn/connection.h"
 #include "jdbc/cppconn/exception.h"
 #include "jdbc/cppconn/prepared_statement.h"
@@ -69,7 +70,9 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
     }
 
     // Serve login page
-    c = nathcat::auth::util::read_file(OAUTH_LOGIN_PAGE_PATH);
+    // c = nathcat::auth::util::read_file(OAUTH_LOGIN_PAGE_PATH);
+    c = nathcat::html::parse_templated_html(
+        std::string(AUTHCAT_HTML_ROOT).append(OAUTH_LOGIN_PAGE_NAME));
     res.status = httplib::StatusCode::OK_200;
     res.set_content(c, "text/html");
   } catch (std::exception &e) {

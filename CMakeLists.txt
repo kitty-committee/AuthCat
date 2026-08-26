@@ -18,6 +18,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   src/server/validate_access_token_endpoint.cpp
   src/server/util.cpp
   src/server/db.cpp
+  src/server/html.cpp
 )
 
   target_include_directories(AuthCat-Server PUBLIC
@@ -28,6 +29,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   libs/apiserver/libs/mysql/include
   libs/cryptorand
   libs/boost-mlp/include
+  libs/lexbor/source
 )
 
   target_link_libraries(AuthCat-Server PUBLIC
@@ -36,6 +38,9 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   nlohmann_json::nlohmann_json
   cryptorand
   boost_multiprecision
+  #lexbor-html
+  #lexbor-dom
+  lexbor
 )
 
   project(hashtest)
