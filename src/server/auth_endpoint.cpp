@@ -11,6 +11,7 @@
 #include <memory>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 using namespace boost::multiprecision;
 
 void printBytes(uint8_t *b, int n) {
@@ -70,9 +71,11 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
     }
 
     // Serve login page
-    // c = nathcat::auth::util::read_file(OAUTH_LOGIN_PAGE_PATH);
     c = nathcat::html::parse_templated_html(
-        std::string(AUTHCAT_HTML_ROOT).append(OAUTH_LOGIN_PAGE_NAME));
+        std::string(AUTHCAT_HTML_ROOT).append(OAUTH_LOGIN_PAGE_NAME),
+        std::unordered_map<std::string, std::string>{
+            {"client_id", client.id}, {"client_name", client.name}});
+
     res.status = httplib::StatusCode::OK_200;
     res.set_content(c, "text/html");
   } catch (std::exception &e) {

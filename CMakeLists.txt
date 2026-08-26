@@ -54,7 +54,7 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
 
   project(regextest)
   add_executable(regextest src/regex_test.cpp)
-
+  target_include_directories(regextest PUBLIC include)
 
 else()
 

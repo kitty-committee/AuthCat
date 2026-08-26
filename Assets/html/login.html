@@ -6,24 +6,39 @@
       rel="stylesheet"
       href="https://nathcat.net/static/css/new-common.css"
     />
+
+    <meta charset="utf-8" />
+
+    <style>
+      .main {
+        padding-left: 20px;
+      }
+
+      .header {
+        padding: 20px;
+        border-bottom: 1px solid var(--quad-color);
+      }
+    </style>
   </head>
 
   <body>
     <div class="content">
       <header template></header>
       <div class="main">
-        <h2>Login to AuthCat</h2>
-        <p>This is a placeholder page</p>
+        <div class="content-card">
+          <h2>Login to grant access to $$client_name$$.</h2>
+        </div>
         <form
           method="POST"
           action="/auth/form?client_id=8312daf76ef711f18ef482c58b23a7e6"
+          class="column align-center"
         >
           <input type="text" name="username" placeholder="Username" />
           <input type="password" name="password" placeholder="Password" />
           <input type="submit" value="Login" />
         </form>
       </div>
-      <div class="footer"></div>
+      <footer template></footer>
     </div>
   </body>
 </html>

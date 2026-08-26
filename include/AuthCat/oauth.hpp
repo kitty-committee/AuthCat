@@ -22,6 +22,7 @@ struct client {
   std::string id;
   std::string redirectionUri;
   std::string password;
+  std::string name;
 };
 
 namespace util {

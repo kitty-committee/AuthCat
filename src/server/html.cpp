@@ -4,7 +4,14 @@
 #include <AuthCat/html.hpp>
 #include <AuthCat/oauth.hpp>
 #include <cstring>
+#include <regex>
+#include <unordered_map>
 using namespace nathcat::html;
+namespace nathcat {
+namespace html {
+std::regex parameter_regex("\\$\\$(.*)\\$\\$");
+}
+} // namespace nathcat
 
 bool __ended_at_replacement = false;
 
@@ -63,7 +70,9 @@ lexbor_action_t __dom_tree_template_walker(lxb_dom_node_t *node, void *ctx) {
   return LEXBOR_ACTION_OK;
 }
 
-std::string nathcat::html::parse_templated_html(std::string rootHtmlFile) {
+std::string nathcat::html::parse_templated_html(
+    std::string rootHtmlFile,
+    std::unordered_map<std::string, std::string> parameters) {
   // Create and parse the specified document
   lxb_html_document_t *doc = lxb_html_document_create();
 
@@ -93,5 +102,29 @@ std::string nathcat::html::parse_templated_html(std::string rootHtmlFile) {
   std::string finalContent((char *)str.data, str.length);
 
   lxb_html_document_destroy(doc);
-  return finalContent;
+
+  // Now insert the parameters into the document, if they can be found in the
+  // supplied map.
+  std::smatch parameter_match;
+
+  std::string subbedContent = "";
+  std::string subContent(finalContent);
+  while (std::regex_search(subContent, parameter_match, parameter_regex)) {
+    // Add the prefix of the match to the subbed content
+    subbedContent.append(parameter_match.prefix().str());
+    // Add the parameter value
+    if (parameters.find(parameter_match[1]) == parameters.end()) {
+      subbedContent.append("$$Couldn't find key '")
+          .append(parameter_match[1])
+          .append("'$$");
+    } else {
+      subbedContent.append(parameters[parameter_match[1]]);
+    }
+    // Get the remainder of the content
+    subContent = parameter_match.suffix().str();
+  }
+
+  // There are no more matches, append the remainder of the content and return.
+  subbedContent.append(subContent);
+  return subbedContent;
 }
