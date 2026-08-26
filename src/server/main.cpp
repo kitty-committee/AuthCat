@@ -34,5 +34,8 @@ int main() {
   std::cout << "Server is ready and running on port "
             << nathcat::auth::serverConfig.port << std::endl;
   // Start server
-  s.listen("0.0.0.0", nathcat::auth::serverConfig.port);
+  bool r = s.listen("0.0.0.0", nathcat::auth::serverConfig.port);
+
+  std::cout << "Finished with return value " << r << std::endl;
+  return 0;
 }
