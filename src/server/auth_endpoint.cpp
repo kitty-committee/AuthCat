@@ -74,7 +74,9 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
     c = nathcat::html::parse_templated_html(
         std::string(AUTHCAT_HTML_ROOT).append(OAUTH_LOGIN_PAGE_NAME),
         std::unordered_map<std::string, std::string>{
-            {"client_id", client.id}, {"client_name", client.name}});
+            {"client_id", client.id},
+            {"client_name", client.name},
+            {"client_redirection_uri", client.redirectionUri}});
 
     res.status = httplib::StatusCode::OK_200;
     res.set_content(c, "text/html");

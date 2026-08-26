@@ -11,7 +11,8 @@
 
     <style>
       .main {
-        padding-left: 20px;
+        padding: 20px;
+        box-sizing: border-box;
       }
 
       .header {
@@ -27,6 +28,19 @@
       <div class="main">
         <div class="content-card">
           <h2>Login to grant access to $$client_name$$.</h2>
+          <p>
+            Note that this will grant access to all the information linked to
+            your account (except your password obviously!) to $$client_name$$.
+            Future updates to this service will provide methods to restrict
+            access to account information.
+          </p>
+          <p>
+            Make sure that you trust this application before granting access!
+          </p>
+          <p>
+            Once you have granted access, you will be redirected to
+            <i>$$client_redirection_uri$$</i>.
+          </p>
         </div>
         <form
           method="POST"
