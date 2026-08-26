@@ -34,7 +34,7 @@ void nathcat::auth::auth_endpoint(const httplib::Request &req,
     db = std::unique_ptr<sql::Connection>{nathcat::auth::driver->connect(
         auth::serverConfig.dbUrl, auth::serverConfig.dbUsername,
         auth::serverConfig.dbPassword)};
-    db->setSchema("oauth");
+    db->setSchema(OAUTH_DB_NAME);
   } catch (sql::SQLException &e) {
     std::cerr << "Couldn't connect to MySQL DB." << std::endl;
     c = "500 - Internal error";
@@ -103,7 +103,7 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
     db = std::unique_ptr<sql::Connection>{nathcat::auth::driver->connect(
         auth::serverConfig.dbUrl, auth::serverConfig.dbUsername,
         auth::serverConfig.dbPassword)};
-    db->setSchema("oauth");
+    db->setSchema(OAUTH_DB_NAME);
   } catch (sql::SQLException &e) {
     std::cerr << "Couldn't connect to MySQL DB." << std::endl;
     c = "500 - Internal error";
