@@ -31,6 +31,8 @@ int main() {
 
   s.registerEndpoint({"/test", {test, nullptr}});
 
+  std::cout << "Server is ready and running on port "
+            << nathcat::auth::serverConfig.port << std::endl;
   // Start server
-  s.listen("0.0.0.0", 8080);
+  s.listen("0.0.0.0", nathcat::auth::serverConfig.port);
 }
