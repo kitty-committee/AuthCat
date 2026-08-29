@@ -29,9 +29,9 @@ User nathcat::auth::authenticate_request(const httplib::Request &req) {
   db->setSchema(OAUTH_DB_NAME);
 
   std::unique_ptr<sql::PreparedStatement> stmt{db->prepareStatement(
-      "SELECT Users.* FROM AccessTokens JOIN AuthGrants, Users ON "
-      "AccessTokens.`grant` = Authgrants.`token` AND AuthGrants.`user` = "
-      "Users.`id` WHERE AccessTokens.`token` = ?")};
+      "SELECT Users.* FROM AccessTokens JOIN AuthGrants ON AuthGrants.`token` "
+      "= AccessTokens.`grant` JOIN Users ON AuthGrants.`user` = Users.`id` "
+      "WHERE AccessTokens.`token` = ?;")};
   stmt->setInt64(1, token_int);
 
   std::unique_ptr<sql::ResultSet> rs{stmt->executeQuery()};
