@@ -36,6 +36,9 @@ User nathcat::auth::authenticate_request(const httplib::Request &req) {
 
   std::unique_ptr<sql::ResultSet> rs{stmt->executeQuery()};
 
+  if (!rs->next())
+    throw AuthFailed();
+
   User u = nathcat::sqlwrapper::fromRow<User>(rs);
   rs->close();
   stmt->close();
