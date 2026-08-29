@@ -16,9 +16,11 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   src/server/token_endpoint.cpp
   src/server/access_tokens.cpp
   src/server/validate_access_token_endpoint.cpp
+  src/server/user_data_endpoint.cpp
   src/server/util.cpp
   src/server/db.cpp
   src/server/html.cpp
+  src/server/authenticate_request.cpp
 )
 
   target_include_directories(AuthCat-Server PUBLIC

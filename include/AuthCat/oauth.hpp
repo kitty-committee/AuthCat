@@ -5,6 +5,7 @@
 #ifndef _OAUTH
 #define _OAUTH
 
+#include "auth.hpp"
 #include "jdbc/cppconn/connection.h"
 #include <api/api.hpp>
 #include <cstdint>
@@ -46,6 +47,8 @@ uint64_t epoch_time();
 
 } // namespace util
 
+User authenticate_request(const httplib::Request &req);
+
 /**
  * @brief User authentication endpoint handler
  */
@@ -69,6 +72,10 @@ void token_endpoint(const httplib::Request &req, httplib::Response &res);
 void validate_access_token_endpoint(const httplib::Request &req,
                                     httplib::Response &res);
 
+/**
+ * @brief Gets user data from the DB based on an access token.
+ */
+void user_data_endpoint(const httplib::Request &req, httplib::Response &res);
 } // namespace auth
 } // namespace nathcat
 
