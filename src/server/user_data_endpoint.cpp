@@ -21,4 +21,9 @@ void nathcat::auth::user_data_endpoint(const httplib::Request &req,
     res.set_header("WWW-Authenticate", "Bearer");
     return;
   }
+
+  res.status = httplib::StatusCode::OK_200;
+  nlohmann::json j(u);
+  j.erase("password");
+  res.set_content(j.dump(), "application/json");
 }

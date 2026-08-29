@@ -18,6 +18,16 @@ void from_json(const nlohmann::json &j, User &u) {
   j.at("verified").get_to(u.verified);
 }
 
+void to_json(nlohmann::json &j, const User &u) {
+  j = {{"id", u.id},
+       {"username", u.username},
+       {"email", u.email},
+       {"fullName", u.fullName},
+       {"password", u.password},
+       {"pfpPath", u.pfpPath},
+       {"verified", u.verified}};
+}
+
 void from_json(const nlohmann::json &j, User_NoSensitiveData &u) {
   j.at("id").get_to(u.id);
   j.at("username").get_to(u.username);

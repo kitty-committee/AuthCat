@@ -19,6 +19,7 @@ struct User {
 };
 
 void from_json(const nlohmann::json &j, User &u);
+void to_json(nlohmann::json &j, const User &u);
 
 struct User_NoSensitiveData {
   int id;
