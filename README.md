@@ -101,6 +101,12 @@ and a JSON body detailing the scope of the token.
 If, for whatever reason, the token is invalid, or cannot be verified,
 the server will reply with a HTTP 401 status.
 
+#### User data endpoint - `GET /user`
+
+This endpoint allows you to get the data of an authenticated user. You must authenticate in the
+same way as the token validation endpoint, and the user data linked to that access token will
+be served in response in a `application/json` compliant format.
+
 ## AuthCat Client library
 
 This is a static library target designed to allow client applications to interact
