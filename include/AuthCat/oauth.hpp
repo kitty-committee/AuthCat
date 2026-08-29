@@ -20,6 +20,7 @@ namespace nathcat {
 namespace auth {
 
 struct client {
+  int app;
   std::string id;
   std::string redirectionUri;
   std::string password;

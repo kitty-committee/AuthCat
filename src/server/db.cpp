@@ -18,8 +18,9 @@ template <>
 struct nathcat::auth::client
 nathcat::sqlwrapper::fromRow<struct nathcat::auth::client>(
     std::unique_ptr<sql::ResultSet> &res) {
-  return {res->getString("id"), res->getString("redirectionUrl"),
-          res->getString("password"), res->getString("name")};
+  return {res->getInt("app"), res->getString("id"),
+          res->getString("redirectionUrl"), res->getString("password"),
+          res->getString("name")};
 }
 
 void nathcat::auth::to_json(nlohmann::json &j, const struct Scope &s) {

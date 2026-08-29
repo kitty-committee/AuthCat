@@ -69,8 +69,8 @@ std::string nathcat::auth::util::read_file(std::string path) {
 struct nathcat::auth::client
 nathcat::auth::util::get_client(std::unique_ptr<sql::Connection> &db,
                                 std::string id) {
-  std::unique_ptr<sql::PreparedStatement> pStmt{
-      db->prepareStatement("SELECT * FROM Clients WHERE id = ?")};
+  std::unique_ptr<sql::PreparedStatement> pStmt{db->prepareStatement(
+      "SELECT * FROM `DataCat`.`OAuth_Clients` WHERE id = ?")};
   pStmt->setString(1, id);
 
   std::unique_ptr<sql::ResultSet> res{pStmt->executeQuery()};
