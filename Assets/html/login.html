@@ -42,15 +42,24 @@
             <i>$$client_redirection_uri$$</i>.
           </p>
         </div>
+
         <form
+          id="form"
           method="POST"
-          action="/auth/form?client_id=8312daf76ef711f18ef482c58b23a7e6"
+          action="/auth/form?client_id="
           class="column align-center"
         >
           <input type="text" name="username" placeholder="Username" />
           <input type="password" name="password" placeholder="Password" />
           <input type="submit" value="Login" />
         </form>
+
+        <script>
+          let params = new URLSearchParams(document.location.search);
+          let client_id = params.get("client_id");
+
+          document.getElementById("form").actionUrl += client_id;
+        </script>
       </div>
       <footer template></footer>
     </div>
