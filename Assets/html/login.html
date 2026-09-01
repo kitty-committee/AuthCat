@@ -69,6 +69,7 @@
             if (email && email !== "") {
               fetch("/reset-password/request", {
                 method: "POST",
+                headers: {"Content-Type", "application/x-www-form-urlencoded"},
                 body: "email=" + email,
               }).then((r) => {
                 if (r.status == 500) alert("Request failed with error 500!");
