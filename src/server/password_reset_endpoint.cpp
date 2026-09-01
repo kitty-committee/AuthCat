@@ -7,13 +7,13 @@ using namespace nathcat::auth;
 
 void nathcat::auth::password_reset_endpoint(const httplib::Request &req,
                                             httplib::Response &res) {
-  if (!req.has_param("token") || !req.has_param("password")) {
+  if (!req.has_param("t") || !req.has_param("password")) {
     res.status = httplib::StatusCode::BadRequest_400;
     res.set_content("Invalid request", "text/plain");
     return;
   }
 
-  std::string token = req.get_param_value("token");
+  std::string token = req.get_param_value("t");
   std::string passwordHash =
       bcrypt::generateHash(req.get_param_value("password"));
 
