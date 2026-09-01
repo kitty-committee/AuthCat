@@ -15,7 +15,7 @@
 #define OAUTH_LOGIN_PAGE_NAME "login.html"
 #define OAUTH_LOGIN_REQUEST_INVALID_PAGE_PATH                                  \
   "Assets/html/login_request_invalid.html"
-#define OAUTH_PASSWORD_RESET_PATH "Assets/html/password-reset.html"
+#define OAUTH_PASSWORD_RESET_PATH "password-reset.html"
 #define OAUTH_DB_NAME "SSO"
 
 namespace nathcat {
