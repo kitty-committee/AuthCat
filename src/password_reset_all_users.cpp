@@ -24,7 +24,7 @@ int main() {
   try {
     stmt = std::unique_ptr<sql::Statement>{db->createStatement()};
     users = std::unique_ptr<sql::ResultSet>{
-        stmt->executeQuery("SELECT id FROM Users")};
+        stmt->executeQuery("SELECT email FROM Users")};
     stmt->close();
   } catch (sql::SQLException &e) {
     std::cerr << "Failed to get users. " << e.what() << std::endl;
@@ -37,7 +37,7 @@ int main() {
 
     while (users->next()) {
       stmt->executeUpdate(std::string("CALL request_password_reset(")
-                              .append(std::to_string(users->getInt("id")))
+                              .append(users->getString("email"))
                               .append(")"));
     }
 
