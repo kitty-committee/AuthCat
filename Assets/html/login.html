@@ -54,11 +54,31 @@
           <input type="submit" value="Login" />
         </form>
 
+        <button onclick="reset_password()">Forgot password</button>
+
         <script>
           let params = new URLSearchParams(document.location.search);
           let client_id = params.get("client_id");
 
           document.getElementById("form").action += client_id;
+
+          function reset_password() {
+            let email = prompt(
+              "Please enter the email address associated with your account.",
+            );
+            if (email && email !== "") {
+              fetch("/reset-password/request", {
+                method: "POST",
+                body: "email=" + email,
+              }).then((r) => {
+                if (r.status == 500) alert("Request failed with error 500!");
+                else
+                  alert(
+                    "If an account with your email exists you will receive an email to reset your password shortly.",
+                  );
+              });
+            } else alert("No email was entered!");
+          }
         </script>
       </div>
       <footer template></footer>

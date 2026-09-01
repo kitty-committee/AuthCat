@@ -28,7 +28,13 @@ int main() {
        {"/token", {nullptr, nathcat::auth::token_endpoint}},
        {"/token/validate",
         {nathcat::auth::validate_access_token_endpoint, nullptr}},
-       {"/user", {nathcat::auth::user_data_endpoint, nullptr}}});
+       {"/user", {nathcat::auth::user_data_endpoint, nullptr}},
+       {"/reset-password/request",
+        {nullptr, nathcat::auth::request_password_reset_endpoint}},
+       {"/reset-password",
+        {nathcat::auth::password_reset_form_endpoint, nullptr}},
+       {"/reset-password/reset",
+        {nullptr, nathcat::auth::password_reset_endpoint}}});
 
   s.registerEndpoint({"/test", {test, nullptr}});
 

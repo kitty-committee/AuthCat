@@ -21,6 +21,9 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   src/server/db.cpp
   src/server/html.cpp
   src/server/authenticate_request.cpp
+  src/server/request_password_reset_endpoint.cpp
+  src/server/password_reset_form_endpoint.cpp
+  src/server/password_reset_endpoint.cpp
 )
 
   target_include_directories(AuthCat-Server PUBLIC

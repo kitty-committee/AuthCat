@@ -15,6 +15,7 @@
 #define OAUTH_LOGIN_PAGE_NAME "login.html"
 #define OAUTH_LOGIN_REQUEST_INVALID_PAGE_PATH                                  \
   "Assets/html/login_request_invalid.html"
+#define OAUTH_PASSWORD_RESET_PATH "Assets/html/password-reset.html"
 #define OAUTH_DB_NAME "SSO"
 
 namespace nathcat {
@@ -71,6 +72,15 @@ void token_endpoint(const httplib::Request &req, httplib::Response &res);
  */
 void validate_access_token_endpoint(const httplib::Request &req,
                                     httplib::Response &res);
+
+void request_password_reset_endpoint(const httplib::Request &req,
+                                     httplib::Response &res);
+
+void password_reset_form_endpoint(const httplib::Request &req,
+                                  httplib::Response &res);
+
+void password_reset_endpoint(const httplib::Request &req,
+                             httplib::Response &res);
 
 /**
  * @brief Gets user data from the DB based on an access token.
