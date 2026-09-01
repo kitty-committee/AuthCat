@@ -61,6 +61,18 @@ if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
   add_executable(regextest src/regex_test.cpp)
   target_include_directories(regextest PUBLIC include)
 
+  project(password_reset_all_users)
+  add_executable(password_reset_all_users src/password_reset_all_users.cpp)
+  target_include_directories(password_reset_all_users PUBLIC
+  libs/apiserver/libs/mysql/include
+  )
+  target_link_directories(password_reset_all_users PUBLIC
+    libs/apiserver/libs/mysql/lib64
+  )
+  target_link_libraries(password_reset_all_users PUBLIC
+  mysqlcppconn
+  )
+
 else()
 
   project(AuthCat-Client)
