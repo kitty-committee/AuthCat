@@ -13,7 +13,7 @@ int main() {
   try {
     db = std::unique_ptr<sql::Connection>{
         driver->connect("localhost:3306", "SSO", "")};
-    db->setSchema("SSO");
+    db->setSchema("sso");
   } catch (sql::SQLException &e) {
     std::cerr << "Couldn't connect to MySQL DB. " << e.what() << std::endl;
     return 0;
