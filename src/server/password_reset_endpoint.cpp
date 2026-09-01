@@ -49,5 +49,8 @@ void nathcat::auth::password_reset_endpoint(const httplib::Request &req,
 
   res.status = httplib::StatusCode::Found_302;
   res.set_content("OK", "text/plain");
-  res.set_header("Location", "/auth");
+  res.set_header("Location",
+                 std::string("auth?client_id=")
+                     .append(OAUTH_POST_PASSWORD_RESET_LOGIN_CLIENT_ID)
+                     .append("&response_type=code"));
 }

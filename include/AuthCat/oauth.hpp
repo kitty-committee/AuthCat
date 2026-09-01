@@ -17,6 +17,8 @@
   "Assets/html/login_request_invalid.html"
 #define OAUTH_PASSWORD_RESET_PATH "password-reset.html"
 #define OAUTH_DB_NAME "SSO"
+#define OAUTH_POST_PASSWORD_RESET_LOGIN_CLIENT_ID                              \
+  "112336d2-a46a-11f1-971d-6c4b902e"
 
 namespace nathcat {
 namespace auth {
