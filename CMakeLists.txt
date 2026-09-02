@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.28.3)
 
-if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
+if(NOT DEFINED AUTHCAT_CLIENT_BUILD OR NOT AUTHCAT_CLIENT_BUILD)
 
   project(AuthCat-Server)
 
@@ -80,19 +80,16 @@ else()
   add_subdirectory(libs)
 
   add_library(AuthCat-Client STATIC
-  src/client/User.cpp
   src/client/auth.cpp
   )
 
   target_include_directories(AuthCat-Client PUBLIC
   include
-  libs/bcrypt/include
   libs/json/include
   libs/apiserver/libs/httplib
 )
 
   target_link_libraries(AuthCat-Client PUBLIC
-  bcrypt
   nlohmann_json::nlohmann_json
 )
 

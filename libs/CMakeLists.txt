@@ -1,4 +1,4 @@
-if(NOT DEFINED CLIENTBUILD OR NOT CLIENTBUILD)
+if(NOT DEFINED AUTHCAT_CLIENT_BUILD OR NOT AUTHCAT_CLIENT_BUILD)
   add_subdirectory(apiserver)
   add_subdirectory(cryptorand)
   add_subdirectory(boost-mlp)
