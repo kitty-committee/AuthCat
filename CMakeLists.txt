@@ -81,6 +81,7 @@ else()
 
   add_library(AuthCat-Client STATIC
   src/client/auth.cpp
+  src/client/User.cpp
   )
 
   target_include_directories(AuthCat-Client PUBLIC
