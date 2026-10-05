@@ -29,16 +29,7 @@ void nathcat::auth::user_data_endpoint(const httplib::Request &req,
     is_authenticated = false;
   }
 
-  if (req.has_param("id")) {
-    int id;
-    try {
-      id = std::stoi(req.get_param_value("id"));
-    } catch (std::exception &e) {
-      res.status = httplib::StatusCode::BadRequest_400;
-      res.set_content("Missing or invalid parameter 'id'", "text/plain");
-      return;
-    }
-
+  if (req.has_param("id") || req.has_param("username")) {
     // Attempt to open a connection to the database
     std::unique_ptr<sql::Connection> db;
     try {
@@ -54,10 +45,45 @@ void nathcat::auth::user_data_endpoint(const httplib::Request &req,
       return;
     }
 
+    int id;
+    bool use_id = false;
     try {
-      std::unique_ptr<sql::PreparedStatement> stmt{
-          db->prepareStatement("SELECT * FROM Users WHERE `id` = ?")};
-      stmt->setInt(1, id);
+      if (req.has_param("id")) {
+        id = std::stoi(req.get_param_value("id"));
+        use_id = true;
+      }
+    } catch (std::exception &e) {
+      res.status = httplib::StatusCode::BadRequest_400;
+      res.set_content("Missing or invalid parameter 'id'", "text/plain");
+      return;
+    }
+
+    std::string username;
+    bool use_username = false;
+    if (req.has_param("username")) {
+      username = req.get_param_value("username");
+      use_username = true;
+    }
+
+    std::string query = "SELECT * FROM Users WHERE ";
+    if (use_id && !use_username)
+      query.append("`id` = ?");
+    else if (use_username && !use_id)
+      query.append("`username` = ?");
+    else
+      query.append("`id` = ? AND `username` = ?");
+
+    try {
+      std::unique_ptr<sql::PreparedStatement> stmt{db->prepareStatement(query)};
+
+      if (use_id && !use_username)
+        stmt->setInt(1, id);
+      else if (use_username && !use_id)
+        stmt->setString(1, username);
+      else {
+        stmt->setInt(1, id);
+        stmt->setString(2, username);
+      }
 
       std::unique_ptr<sql::ResultSet> rs{stmt->executeQuery()};
 

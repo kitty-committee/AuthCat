@@ -107,10 +107,15 @@ This endpoint allows you to get the data of an authenticated user. You must auth
 same way as the token validation endpoint, and the user data linked to that access token will
 be served in response in a `application/json` compliant format.
 
-You may also specify the `id` parameter to search for a user by their ID. This works regardless of
-your authentication state. If you specify this parameter _while_ authenticated, only the results
-of the search by user ID will be returned. If this parameter is not specified, the authenticated user
-is returned.
+If no parameters are specified, this endpoint follows the behaviour described above.
+One may optionally however, specify any combination of the following arguments:
+
+- `id`
+- `username`
+
+When specified, these parameters will be used to search for and return a list of matching users.
+If these are specified, the endpoint does not require authentication, and if a request both
+is authenticated and specifies these parameters, the search will be returned instead of the authenticated user.
 
 ## AuthCat Client library
 
