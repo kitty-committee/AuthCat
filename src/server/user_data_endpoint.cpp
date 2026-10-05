@@ -61,9 +61,15 @@ void nathcat::auth::user_data_endpoint(const httplib::Request &req,
 
       std::unique_ptr<sql::ResultSet> rs{stmt->executeQuery()};
 
-      std::vector<User> users = sqlwrapper::toArray<User>(rs);
+      nlohmann::json users(sqlwrapper::toArray<User>(rs));
+
+      for (auto it = users.begin(); it != users.end(); it++) {
+        it.value().erase("password");
+        it.value().erase("email");
+      }
+
       res.status = httplib::StatusCode::OK_200;
-      res.set_content(nlohmann::json(users).dump(), "application/json");
+      res.set_content(users.dump(), "application/json");
       return;
     } catch (sql::SQLException &e) {
       res.status = httplib::StatusCode::InternalServerError_500;
