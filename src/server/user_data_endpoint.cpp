@@ -69,9 +69,9 @@ void nathcat::auth::user_data_endpoint(const httplib::Request &req,
     if (use_id && !use_username)
       query.append("`id` = ?");
     else if (use_username && !use_id)
-      query.append("`username` = ?");
+      query.append("`username` LIKE ?");
     else
-      query.append("`id` = ? AND `username` = ?");
+      query.append("`id` = ? AND `username` LIKE ?");
 
     try {
       std::unique_ptr<sql::PreparedStatement> stmt{db->prepareStatement(query)};
