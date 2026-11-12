@@ -73,6 +73,10 @@ if(NOT DEFINED AUTHCAT_CLIENT_BUILD OR NOT AUTHCAT_CLIENT_BUILD)
   mysqlcppconn
   )
 
+  project(vaultstest)
+  add_executable(vaultstest src/vaults_test.cpp)
+  target_include_directories(vaultstest PUBLIC include)
+
 else()
 
   project(AuthCat-Client)
