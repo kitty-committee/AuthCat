@@ -64,6 +64,12 @@
             document.getElementById("form").action += "&scope=" + scope;
           }
 
+          let state = params.get("state");
+
+          if (state) {
+            document.getElementById("form").action += "&state=" + state;
+          }
+
           function reset_password() {
             let email = prompt(
               "Please enter the email address associated with your account.",

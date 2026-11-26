@@ -178,6 +178,13 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
   std::string codeParam = "?code=";
   codeParam.append(os.str());
 
+  std::string stateParam = "";
+  if (req.has_param("state")) {
+    stateParam = "&state=";
+    stateParam.append(req.get_param_value("state"));
+  }
+
   res.status = httplib::StatusCode::Found_302;
-  res.set_header("Location", client.redirectionUri.append(codeParam));
+  res.set_header("Location",
+                 client.redirectionUri.append(codeParam).append(stateParam));
 }
