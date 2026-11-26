@@ -1,0 +1,6 @@
+{
+  "issuer": "https://auth.nathcat.net",
+  "authorization_endpoint": "https://auth.nathcat.net/auth",
+  "token_endpoint": "https://auth.nathcat.net/token",
+  "userinfo_endpoint": "https://auth.nathcat.net/user"
+}

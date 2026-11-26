@@ -58,6 +58,11 @@
           let client_id = params.get("client_id");
 
           document.getElementById("form").action += client_id;
+          let scope = params.get("scope");
+
+          if (scope) {
+            document.getElementById("form").action += "&scope=" + scope;
+          }
 
           function reset_password() {
             let email = prompt(

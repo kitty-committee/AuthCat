@@ -7,6 +7,7 @@
 #include <AuthCat/auth_grant.hpp>
 #include <AuthCat/oauth.hpp>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <cstdint>
 #include <httplib.h>
 #include <memory>
 #include <sstream>
@@ -116,6 +117,22 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
   std::string username = req.get_param_value("username");
   std::string password = req.get_param_value("password");
 
+  // Extract scope parameters
+  struct Scope scope = {true, false};
+  if (req.has_param("scope")) {
+    std::string scopeString = req.get_param_value("scope");
+    std::stringstream ss(scopeString);
+
+    std::string param;
+    while (ss >> param) {
+      if (param == "allResources") {
+        scope.allResources = true;
+      } else if (param == "openid") {
+        scope.openid = true;
+      }
+    }
+  }
+
   // Authenticate the user
   nathcat::auth::User user;
   try {
@@ -130,8 +147,7 @@ void nathcat::auth::auth_form_endpoint(const httplib::Request &req,
   }
 
   // Authentication successful, create a auth grant and return it
-  // TODO change the scope parameter to be something defined by the client.
-  nathcat::auth::AuthGrant grantCode = create_auth_grant(user.id, {true});
+  nathcat::auth::AuthGrant grantCode = create_auth_grant(user.id, scope);
 
   // Insert the new auth code into the DB
   try {

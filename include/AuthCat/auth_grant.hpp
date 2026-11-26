@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <memory>
 #define AUTH_GRANT_SCOPE_SIZE 8
-#define AUTH_GRANT_SCOPE_PADDING 64 - 1
+#define AUTH_GRANT_SCOPE_PADDING 64 - 2
 
 #define AUTH_GRANT_EXPIRY_TIME 86400
 
@@ -39,6 +39,7 @@ struct Scope {
    * @brief Potentially dangerous! This is being used as a placeholder.
    */
   bool allResources;
+  bool openid;
 
   bool padding[AUTH_GRANT_SCOPE_PADDING];
 };
